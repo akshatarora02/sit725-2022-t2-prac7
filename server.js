@@ -1,16 +1,22 @@
-const express = require("express")
-const app = express()
-var cors = require('cors')
+var express = require("express")
+var app = express()
+var cors = require("cors")
 let dbConnect = require("./dbConnect");
 let projectRoutes = require("./routes/projectRoutes");
-let userRoutes = require("./routes/userRoutes");
+let userRoute = require("./routes/userRoutes");
+let http = require('http').createServer(app);
+
+let io = require('socket.io')(http);
+
 app.use(express.static(__dirname + '/public'))
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors())
 
-app.use("/api/projects", projectRoutes)
-app.use("/api/user", userRoutes)
+app.use('/api/projects', projectRoutes)
+
+app.use('/api/user', userRoute)
+
 
 const addNumbers = (number1, number2) => {
     var num1 = parseInt(number1)
@@ -29,8 +35,24 @@ app.get("/addTwoNumbers/:firstNumber/:secondNumber", (req, res) => {
     else { res.json({ result: result, statusCode: 200 }).status(200) }
 })
 
-const port = process.env.port || 3000;
+io.on('connection', (socket) => {
+    console.log('a user connected', socket.id);
+    socket.on('disconnect', () => {
+        console.log('user disconnected');
+    });
+    setInterval(() => {
+        socket.emit('number', new Date().toISOString());
+    }, 1000);
 
-app.listen(port, () => {
+    setInterval(() => {
+        socket.emit('random_number', parseInt(Math.random() * 10));
+    }, 3000);
+
+});
+
+
+var port = process.env.port || 3000;
+
+http.listen(port, () => {
     console.log("App running at http://localhost:" + port)
-})
+});

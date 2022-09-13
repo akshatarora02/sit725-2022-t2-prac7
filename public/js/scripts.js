@@ -60,6 +60,12 @@ const addCards = (items) => {
     });
 }
 
+let socket = io();
+
+socket.on('number', (msg) => {
+    $("#heading").html("Welcome to SIT 725 Week 7 (Sockets): " + msg)
+})
+
 $(document).ready(function () {
     $('.materialboxed').materialbox();
     //addCards(cardList);

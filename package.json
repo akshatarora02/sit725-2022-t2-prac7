@@ -1,7 +1,7 @@
 {
   "name": "sit725-2022-t1-prac7",
   "version": "1.0.0",
-  "description": "week 4 prac for SIT 725 2022",
+  "description": "week 7 prac for SIT 725 2022",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -27,6 +27,7 @@
     "express": "^4.18.1",
     "mocha": "^10.0.0",
     "mongodb": "^4.9.0",
-    "request": "^2.88.2"
+    "request": "^2.88.2",
+    "socket.io": "^4.5.2"
   }
 }
